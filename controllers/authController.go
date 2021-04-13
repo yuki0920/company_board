@@ -9,6 +9,7 @@ func Register(c *fiber.Ctx) error {
 	user := models.User{
 		FirstName: "Yuki",
 		LastName:  "Watanabe",
+		Email:     "test@example.com",
 	}
 
 	return c.JSON(user)
