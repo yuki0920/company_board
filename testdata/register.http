@@ -1,1 +1,10 @@
-POST http://localhost:8000/api/register
+POST http://localhost:8000/api/register HTTP/1.1
+content-type: application/json
+
+{
+  "first_name": "Yuki",
+  "last_name": "Watanabe",
+  "email": "test@example.com",
+  "password": "1",
+  "password_confirm": "2"
+}
