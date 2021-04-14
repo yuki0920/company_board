@@ -6,5 +6,5 @@ content-type: application/json
   "last_name": "Watanabe",
   "email": "test@example.com",
   "password": "1",
-  "password_confirm": "2"
+  "password_confirm": "1"
 }

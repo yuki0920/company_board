@@ -2,7 +2,9 @@ package controllers
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/yuki0920/company_board/database"
 	"github.com/yuki0920/company_board/models"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func Register(c *fiber.Ctx) error {
@@ -19,12 +21,17 @@ func Register(c *fiber.Ctx) error {
 		})
 	}
 
+	// パスワードのハッシュ化
+	password, _ := bcrypt.GenerateFromPassword([]byte(data["password"]), 14)
+
 	user := models.User{
 		FirstName: data["first_name"],
 		LastName:  data["last_name"],
 		Email:     data["email"],
-		Password:  data["password"],
+		Password:  password,
 	}
+
+	database.DB.Create(&user)
 
 	return c.JSON(user)
 }
