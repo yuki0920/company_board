@@ -89,3 +89,33 @@ func Login(c *fiber.Ctx) error {
 		"message": "success",
 	})
 }
+
+type Claims struct {
+	jwt.StandardClaims
+}
+
+func User(c *fiber.Ctx) error {
+	// クッキー取得
+	cookie := c.Cookies("jwt")
+
+	// デコード
+	token, err := jwt.ParseWithClaims(cookie, &Claims{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte("secret"), nil
+	})
+
+	if err != nil || !token.Valid {
+		c.Status(fiber.StatusUnauthorized)
+		return c.JSON(fiber.Map{
+			"message": "unauthenticated",
+		})
+	}
+
+	// structから要素Issuerを取り出すための書き方
+	claims := token.Claims.(*Claims)
+
+	var user models.User
+
+	database.DB.Where("id = ?", claims.Issuer).First(&user)
+
+	return c.JSON(user)
+}
