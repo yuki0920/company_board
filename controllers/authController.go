@@ -1,6 +1,10 @@
 package controllers
 
 import (
+	"strconv"
+	"time"
+
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
 	"github.com/yuki0920/company_board/database"
 	"github.com/yuki0920/company_board/models"
@@ -60,6 +64,17 @@ func Login(c *fiber.Ctx) error {
 			"message": "incorrect password",
 		})
 	}
+	clams := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
+		// strconv.FormatInt((int(user.id))) と同義
+		Issuer:    strconv.Itoa(int(user.Id)),
+		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(), // 1day
+	})
 
-	return c.JSON(user)
+	token, err := clams.SignedString([]byte("secret"))
+
+	if err != nil {
+		return c.SendStatus(fiber.StatusInternalServerError)
+	}
+
+	return c.JSON(token)
 }
