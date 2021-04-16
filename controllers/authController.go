@@ -8,6 +8,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/yuki0920/company_board/database"
 	"github.com/yuki0920/company_board/models"
+	"github.com/yuki0920/company_board/util"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -64,13 +65,8 @@ func Login(c *fiber.Ctx) error {
 			"message": "incorrect password",
 		})
 	}
-	clams := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
-		// strconv.FormatInt((int(user.id))) と同義
-		Issuer:    strconv.Itoa(int(user.Id)),
-		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(), // 1day
-	})
 
-	token, err := clams.SignedString([]byte("secret"))
+	token, err := util.GenerateJwt(strconv.Itoa(int(user.Id)))
 
 	if err != nil {
 		return c.SendStatus(fiber.StatusInternalServerError)
@@ -98,24 +94,11 @@ func User(c *fiber.Ctx) error {
 	// クッキー取得
 	cookie := c.Cookies("jwt")
 
-	// デコード
-	token, err := jwt.ParseWithClaims(cookie, &Claims{}, func(token *jwt.Token) (interface{}, error) {
-		return []byte("secret"), nil
-	})
-
-	if err != nil || !token.Valid {
-		c.Status(fiber.StatusUnauthorized)
-		return c.JSON(fiber.Map{
-			"message": "unauthenticated",
-		})
-	}
-
-	// structから要素Issuerを取り出すための書き方
-	claims := token.Claims.(*Claims)
+	id, _ := util.ParseJwt(cookie)
 
 	var user models.User
 
-	database.DB.Where("id = ?", claims.Issuer).First(&user)
+	database.DB.Where("id = ?", id).First(&user)
 
 	return c.JSON(user)
 }
