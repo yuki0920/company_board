@@ -2,7 +2,8 @@ POST http://localhost:8000/api/users HTTP/1.1
 content-type: application/json
 
 {
-  "first_name": "testdata_1",
-  "last_name": "example_1",
-  "email": "testdata_1@example.com"
+  "first_name": "test_admin",
+  "last_name": "test_admin",
+  "email": "test_admin@example.com",
+  "role_id": 1
 }
