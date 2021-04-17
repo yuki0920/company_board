@@ -24,10 +24,12 @@ func CreateRole(c *fiber.Ctx) error {
 		return err
 	}
 
+	// インターフェースのタイプアサーションを定義して、スライスの中身がintやstringなど複数パターンの型を受け取れるようにしている
 	list := roleDto["permissions"].([]interface{})
 	permissions := make([]models.Permission, len(list))
 
 	for i, permissionId := range list {
+		// listはインターフェース型なのでstringのタイプアサーションで型の解決をしている
 		id, _ := strconv.Atoi(permissionId.(string))
 
 		permissions[i] = models.Permission{
