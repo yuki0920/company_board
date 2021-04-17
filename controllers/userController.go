@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"strconv"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/yuki0920/company_board/database"
 	"github.com/yuki0920/company_board/models"
@@ -25,6 +27,19 @@ func CreateUser(c *fiber.Ctx) error {
 	user.SetPassword("1234")
 
 	database.DB.Create(&user)
+
+	return c.JSON(user)
+}
+
+func GetUser(c *fiber.Ctx) error {
+	id, _ := strconv.Atoi(c.Params("id"))
+
+	// DBに問い合わせる前にstructを生成する
+	user := models.User{
+		Id: uint(id),
+	}
+
+	database.DB.Find(&user)
 
 	return c.JSON(user)
 }
