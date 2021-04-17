@@ -2,5 +2,6 @@ POST http://localhost:8000/api/roles HTTP/1.1
 content-type: application/json
 
 {
-  "name": "Test"
+  "name": "test role",
+  "permissions": ["1", "3"]
 }
