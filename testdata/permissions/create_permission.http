@@ -1,0 +1,16 @@
+POST http://localhost:8000/api/permissions HTTP/1.1
+content-type: application/json
+
+{
+  "name": "edit_orders"
+}
+
+
+# view_users
+# edit_users
+# view_roles
+# edit_roles
+# view_products
+# edit_products
+# view_orders
+# edit_orders
