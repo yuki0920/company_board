@@ -18,5 +18,6 @@ func Connect() {
 
 	DB = database
 
+	// テーブルがうまく生成されないときは、引数を減らしてみるとうまくいくことがある
 	database.AutoMigrate(&models.User{}, &models.Role{}, &models.Permission{})
 }
