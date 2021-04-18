@@ -21,4 +21,6 @@ func Connect() {
 	// テーブルがうまく生成されないときは、引数を減らしてみるとうまくいくことがある
 	database.AutoMigrate(&models.User{}, &models.Role{}, &models.Permission{})
 	database.AutoMigrate(&models.Product{})
+	database.AutoMigrate(&models.Order{})
+	database.AutoMigrate(&models.OrderItem{})
 }
