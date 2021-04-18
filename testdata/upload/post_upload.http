@@ -1,0 +1,10 @@
+// うまくPOSTできない
+POST http://localhost:8000/api/upload HTTP/1.1
+Content-Type: multipart/form-data;boundary=----WebKitFormBoundaryuploadimage
+
+----WebKitFormBoundaryuploadimage
+Content-Disposition: form-data; name="image"; filename="sample.jpg"
+Content-Type: image/jpeg
+
+< ./sample.jpg
+----WebKitFormBoundaryuploadimage--

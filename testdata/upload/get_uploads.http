@@ -1,0 +1,2 @@
+GET http://localhost:8000/api/uploads/sample.jpg HTTP/1.1
+content-type: application/json
