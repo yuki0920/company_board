@@ -47,7 +47,7 @@ func CreateFile(filePath string) error {
 
 	for _, order := range orders {
 		data := []string{
-			strconv.Itoa(order.Id),
+			strconv.Itoa(int(order.Id)),
 			order.FirstName + " " + order.LastName,
 			order.Email,
 			"",
@@ -76,4 +76,22 @@ func CreateFile(filePath string) error {
 	}
 
 	return nil
+}
+
+type Sales struct {
+	Date string `json:"date"`
+	Sum  string `json:"sum"`
+}
+
+func Chart(c *fiber.Ctx) error {
+	var sales []Sales
+
+	database.DB.Raw(`
+        SELECT date(o.created_at) as date, SUM(oi.price * oi.quantity) as sum
+        FROM orders o
+        JOIN order_items oi on o.id = oi.order_id
+        GROUP BY date
+    `).Scan(&sales)
+
+	return c.JSON(sales)
 }
