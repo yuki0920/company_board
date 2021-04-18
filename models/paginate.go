@@ -7,18 +7,15 @@ import (
 	"gorm.io/gorm"
 )
 
-func Paginate(db *gorm.DB, page int) fiber.Map {
-	limit := 5
+func Paginate(db *gorm.DB, entity Entity, page int) fiber.Map {
+	limit := 15
 	offset := (page - 1) * limit
-	var total int64
 
-	var products []Product
-
-	db.Offset(offset).Limit(limit).Find(&products)
-	db.Model(&Product{}).Count(&total)
+	data := entity.Take(db, limit, offset)
+	total := entity.Count(db)
 
 	return fiber.Map{
-		"data": products,
+		"data": data,
 		"meta": fiber.Map{
 			"total":     total,
 			"page":      1,
