@@ -30,7 +30,7 @@ func CreateRole(c *fiber.Ctx) error {
 
 	for i, permissionId := range list {
 		// listはインターフェース型なのでstringのタイプアサーションで型の解決をしている
-		id, _ := strconv.Atoi(permissionId.(string))
+		id := permissionId.(float64)
 
 		permissions[i] = models.Permission{
 			Id: uint(id),
