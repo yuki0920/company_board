@@ -2,7 +2,7 @@ package database
 
 import (
 	"github.com/yuki0920/company_board/models"
-	"gorm.io/driver/sqlite"
+	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
@@ -10,7 +10,13 @@ import (
 var DB *gorm.DB
 
 func Connect() {
-	database, err := gorm.Open(sqlite.Open("go_admin"), &gorm.Config{})
+	// 環境変数化したい
+	USER := "root"
+	PASS := "password"
+	PROTOCOL := "tcp(db:3306)"
+	DBNAME := "company_board"
+	DSN := USER + ":" + PASS + "@" + PROTOCOL + "/" + DBNAME
+	database, err := gorm.Open(mysql.Open(DSN), &gorm.Config{})
 
 	if err != nil {
 		panic("Could not connect to database")
