@@ -9,8 +9,17 @@ go run main.go
 air
 ```
 
-### フロントエンド
+## Seed データ
 
-```bash
-yarn serve
+Order/OrderItem は Seed を使う
+
+```main.go
+seeds.ExecSeed(30)
+```
+
+データ刷新時はテーブルを消す
+
+```database/connect.go
+database.Migrator().DropTable(&models.Order{})
+database.Migrator().DropTable(&models.OrderItem{})
 ```
