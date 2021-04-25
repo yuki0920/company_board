@@ -86,8 +86,10 @@ type Sales struct {
 func Chart(c *fiber.Ctx) error {
 	var sales []Sales
 
+	// SELECT句はcreated_atが日付用のオブジェクトならば下記
+	// SELECT date(o.created_at) as date, SUM(oi.price * oi.quantity) as sum
 	database.DB.Raw(`
-        SELECT date(o.created_at) as date, SUM(oi.price * oi.quantity) as sum
+		SELECT o.created_at as date, SUM(oi.price * oi.quantity) as sum
         FROM orders o
         JOIN order_items oi on o.id = oi.order_id
         GROUP BY date
